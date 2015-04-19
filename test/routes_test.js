@@ -58,7 +58,7 @@ describe('Routes', function () {
 
     describe('with a pre-registered player', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('WangHao', function() {
+        pong.registerPlayer('U96', 'WangHao', function() {
           done();
         });
       });
@@ -92,8 +92,8 @@ describe('Routes', function () {
 
     describe('with two players', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('WangHao', function () {
-          pong.registerPlayer('ZhangJike', function () {
+        pong.registerPlayer('U96', 'WangHao', function () {
+          pong.registerPlayer('U97', 'ZhangJike', function () {
             done();
           });
         });
@@ -113,10 +113,10 @@ describe('Routes', function () {
 
     describe('with four players', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('WangHao', function () {
-          pong.registerPlayer('ZhangJike', function () {
-            pong.registerPlayer('ChenQi', function () {
-              pong.registerPlayer('ViktorBarna', function () {
+        pong.registerPlayer('U96', 'WangHao', function () {
+          pong.registerPlayer('U97', 'ZhangJike', function () {
+            pong.registerPlayer('U98', 'ChenQi', function () {
+              pong.registerPlayer('U99', 'ViktorBarna', function () {
                 done();
               });
             });
@@ -151,8 +151,8 @@ describe('Routes', function () {
   describe('accept and decline', function() {
     describe('with a challenge', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('WangHao', function () {
-          pong.registerPlayer('ZhangJike', function () {
+        pong.registerPlayer('U96', 'WangHao', function () {
+          pong.registerPlayer('U97', 'ZhangJike', function () {
             pong.createSingleChallenge('WangHao', 'ZhangJike', function () {
               done();
             });
@@ -188,8 +188,8 @@ describe('Routes', function () {
   describe('won and lost', function() {
     describe('with an accepted challenge', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('WangHao', function () {
-          pong.registerPlayer('ZhangJike', function () {
+        pong.registerPlayer('U96', 'WangHao', function () {
+          pong.registerPlayer('U97', 'ZhangJike', function () {
             pong.createSingleChallenge('WangHao', 'ZhangJike', function () {
               pong.acceptChallenge('ZhangJike', function () {
                 done();
@@ -226,7 +226,7 @@ describe('Routes', function () {
   describe('rank', function() {
     describe('with a pre-registered player', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('WangHao', function() {
+        pong.registerPlayer('U96', 'WangHao', function() {
           done();
         });
       });
@@ -246,13 +246,13 @@ describe('Routes', function () {
 
   describe('leaderboard', function() {
     beforeEach(function (done) {
-      pong.registerPlayer('WangHao', function (err, user) {
+      pong.registerPlayer('U96', 'WangHao', function (err, user) {
         user.wins = 4;
         user.losses = 3;
         user.tau = 3;
         user.elo = 58;
         user.save(function () {
-          pong.registerPlayer('ZhangJike', function (err, user) {
+          pong.registerPlayer('U97', 'ZhangJike', function (err, user) {
             user.wins = 42;
             user.losses = 24;
             user.tau = 3;
@@ -281,7 +281,7 @@ describe('Routes', function () {
     describe('with a pre-registered player', function () {
       beforeEach(function (done) {
         process.env.ADMIN_SECRET = 'admin_secret';
-        pong.registerPlayer('WangHao', function() {
+        pong.registerPlayer('U96', 'WangHao', function() {
           done();
         });
       });
@@ -336,13 +336,13 @@ describe('Routes', function () {
 
     describe('with two players', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('ZhangJike', function (err, user) {
+        pong.registerPlayer('U96', 'ZhangJike', function (err, user) {
           user.wins = 42;
           user.losses = 24;
           user.tau = 3;
           user.elo = 158;
           user.save(function () {
-            pong.registerPlayer('ViktorBarna', function (err, user) {
+            pong.registerPlayer('U97', 'ViktorBarna', function (err, user) {
               user.wins = 4;
               user.losses = 4;
               user.tau = 3;

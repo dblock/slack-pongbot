@@ -37,7 +37,7 @@ describe('Pong', function () {
 
   describe('#registerPlayer', function () {
     beforeEach(function (done) {
-      pong.registerPlayer('ZhangJike', done);
+      pong.registerPlayer('U96', 'ZhangJike', done);
     });
 
     it('creates a player record', function (done) {
@@ -53,7 +53,7 @@ describe('Pong', function () {
     });
 
     it('does not create a duplicate player', function (done) {
-      pong.registerPlayer('ZhangJike', function (err, user) {
+      pong.registerPlayer('U96', 'ZhangJike', function (err, user) {
         expect(err).to.not.be.undefined;
         expect(err.code).to.eq(11000);
         done();
@@ -64,10 +64,10 @@ describe('Pong', function () {
   describe('#findPlayer', function () {
     describe('with a player', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('ZhangJike', done);
+        pong.registerPlayer('U96', 'ZhangJike', done);
       });
 
-      it('finds a player', function (done) {
+      it('finds a player by name', function (done) {
         pong.findPlayer('ZhangJike', function (err, user) {
           expect(err).to.be.null;
           expect(user).not.to.be.null;
@@ -75,6 +75,16 @@ describe('Pong', function () {
           done();
         });
       });
+
+      it('finds a player by id', function (done) {
+        pong.findPlayer('U96', function (err, user) {
+          expect(err).to.be.null;
+          expect(user).not.to.be.null;
+          expect(user.user_name).to.eq('ZhangJike');
+          done();
+        });
+      });
+
     });
 
     describe('without a player', function () {
@@ -89,11 +99,29 @@ describe('Pong', function () {
     });
   });
 
+  describe('#findAndUpdatePlayer', function () {
+    describe('with a player', function () {
+      beforeEach(function (done) {
+        pong.registerPlayer('U96', 'ZhangJike', done);
+      });
+
+      it('finds a player and updates its name', function (done) {
+        pong.findAndUpdatePlayer('U96', 'DengYaping', function (err, user) {
+          expect(err).to.be.null;
+          expect(user).not.to.be.null;
+          expect(user.user_id).to.eq('U96');
+          expect(user.user_name).to.eq('DengYaping');
+          done();
+        });
+      });
+    });
+  });
+
   describe('getEveryone', function () {
     describe('with a player', function (done) {
       beforeEach(function (done) {
         sinon.spy(console, 'log');
-        pong.registerPlayer('ZhangJike', done);
+        pong.registerPlayer('U96', 'ZhangJike', done);
       });
 
       afterEach(function () {
@@ -122,7 +150,7 @@ describe('Pong', function () {
 
     describe('with a player', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('ZhangJike', function () {
+        pong.registerPlayer('U96', 'ZhangJike', function () {
           pong.updateWins('ZhangJike', done);
         });
       });
@@ -158,7 +186,7 @@ describe('Pong', function () {
 
     describe('with a player', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('ZhangJike', function () {
+        pong.registerPlayer('U96', 'ZhangJike', function () {
           pong.updateLosses('ZhangJike', done);
         });
       });
@@ -194,7 +222,7 @@ describe('Pong', function () {
 
     describe('with a challenger', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('ZhangJike', done);
+        pong.registerPlayer('U96', 'ZhangJike', done);
       });
 
       it('returns an error when the challenged cannot be found', function (done) {
@@ -207,7 +235,7 @@ describe('Pong', function () {
 
       describe('with a challenged', function () {
         beforeEach(function (done) {
-          pong.registerPlayer('DengYaping', done);
+          pong.registerPlayer('U97', 'DengYaping', done);
         });
 
         it('creates a challenge', function (done) {
@@ -249,10 +277,10 @@ describe('Pong', function () {
   describe('createDoubleChallenge', function () {
     describe('with 4 players', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('ZhangJike', function () {
-          pong.registerPlayer('DengYaping', function () {
-            pong.registerPlayer('ChenQi', function () {
-              pong.registerPlayer('ViktorBarna', function () {
+        pong.registerPlayer('U96', 'ZhangJike', function () {
+          pong.registerPlayer('U97', 'DengYaping', function () {
+            pong.registerPlayer('U98', 'ChenQi', function () {
+              pong.registerPlayer('U99', 'ViktorBarna', function () {
                 done();
               });
             });
@@ -294,7 +322,7 @@ describe('Pong', function () {
 
     describe('with a player', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('ZhangJike', function (err, user) {
+        pong.registerPlayer('U96', 'ZhangJike', function (err, user) {
           var challenge = new Challenge({
             state: 'Proposed',
             type: 'Singles',
@@ -330,7 +358,7 @@ describe('Pong', function () {
 
     describe('with a player', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('ZhangJike', done);
+        pong.registerPlayer('U96', 'ZhangJike', done);
       });
 
       it('sets challenge', function(done) {
@@ -356,8 +384,8 @@ describe('Pong', function () {
   describe('removeChallenge', function () {
     describe('with a challenge', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('ZhangJike', function () {
-          pong.registerPlayer('DengYaping', function () {
+        pong.registerPlayer('U96', 'ZhangJike', function () {
+          pong.registerPlayer('U97', 'DengYaping', function () {
             pong.createSingleChallenge('ZhangJike', 'DengYaping', function () {
               done();
             });
@@ -380,8 +408,8 @@ describe('Pong', function () {
   describe('acceptChallenge', function () {
     describe('with a challenge', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('ZhangJike', function () {
-          pong.registerPlayer('DengYaping', function () {
+        pong.registerPlayer('U96', 'ZhangJike', function () {
+          pong.registerPlayer('U97', 'DengYaping', function () {
             pong.createSingleChallenge('ZhangJike', 'DengYaping', function () {
               done();
             });
@@ -411,8 +439,8 @@ describe('Pong', function () {
   describe('declineChallenge', function () {
     describe('with a challenge', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('ZhangJike', function () {
-          pong.registerPlayer('DengYaping', function () {
+        pong.registerPlayer('U96', 'ZhangJike', function () {
+          pong.registerPlayer('U97', 'DengYaping', function () {
             pong.createSingleChallenge('ZhangJike', 'DengYaping', function () {
               done();
             });
@@ -444,10 +472,10 @@ describe('Pong', function () {
 
   describe('calculateTeamElo', function () {
     beforeEach('with two players', function (done) {
-      pong.registerPlayer('ZhangJike', function (err, user1) {
+      pong.registerPlayer('U96', 'ZhangJike', function (err, user1) {
         user1.elo = 4;
         user1.save(function () {
-          pong.registerPlayer('DengYaping', function (err, user2) {
+          pong.registerPlayer('U97', 'DengYaping', function (err, user2) {
             user2.elo = 2;
             user2.save(function () {
               done();
@@ -467,8 +495,8 @@ describe('Pong', function () {
 
   describe('eloSinglesChange', function () {
     beforeEach(function (done) {
-      pong.registerPlayer('ZhangJike', function (err, user1) {
-        pong.registerPlayer('DengYaping', function (err, user2) {
+      pong.registerPlayer('U96', 'ZhangJike', function (err, user1) {
+        pong.registerPlayer('U97', 'DengYaping', function (err, user2) {
           done();
         });
       });
@@ -487,10 +515,10 @@ describe('Pong', function () {
 
   describe('eloDoublesChange', function () {
     beforeEach(function (done) {
-      pong.registerPlayer('ZhangJike', function () {
-        pong.registerPlayer('DengYaping', function () {
-          pong.registerPlayer('ChenQi', function () {
-            pong.registerPlayer('ViktorBarna', function () {
+      pong.registerPlayer('U96', 'ZhangJike', function () {
+        pong.registerPlayer('U97', 'DengYaping', function () {
+          pong.registerPlayer('U98', 'ChenQi', function () {
+            pong.registerPlayer('U99', 'ViktorBarna', function () {
               done();
             });
           });
@@ -516,8 +544,8 @@ describe('Pong', function () {
   describe('win and lose', function () {
     describe('with a single challenge', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('ZhangJike', function () {
-          pong.registerPlayer('DengYaping', function () {
+        pong.registerPlayer('U96', 'ZhangJike', function () {
+          pong.registerPlayer('U97', 'DengYaping', function () {
             pong.createSingleChallenge('ZhangJike', 'DengYaping', function () {
               done();
             });
@@ -632,10 +660,10 @@ describe('Pong', function () {
 
     describe('with an accepted doubles challenge', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('ZhangJike', function () {
-          pong.registerPlayer('DengYaping', function () {
-            pong.registerPlayer('ChenQi', function () {
-              pong.registerPlayer('ViktorBarna', function () {
+        pong.registerPlayer('U96', 'ZhangJike', function () {
+          pong.registerPlayer('U97', 'DengYaping', function () {
+            pong.registerPlayer('U98', 'ChenQi', function () {
+              pong.registerPlayer('U99', 'ViktorBarna', function () {
                 pong.createDoubleChallenge('ZhangJike', 'DengYaping', 'ChenQi', 'ViktorBarna', function (err, challenge) {
                   pong.acceptChallenge('DengYaping', function () {
                     done();
@@ -948,7 +976,7 @@ describe('Pong', function () {
 
     describe('with a player', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('ZhangJike', function (err, user) {
+        pong.registerPlayer('U96', 'ZhangJike', function (err, user) {
           user.wins = 42;
           user.losses = 24;
           user.tau = 3;
@@ -975,13 +1003,13 @@ describe('Pong', function () {
   describe('resetAll', function () {
     describe('with two players', function () {
       beforeEach(function (done) {
-        pong.registerPlayer('ZhangJike', function (err, user) {
+        pong.registerPlayer('U96', 'ZhangJike', function (err, user) {
           user.wins = 42;
           user.losses = 24;
           user.tau = 3;
           user.elo = 158;
           user.save(function () {
-            pong.registerPlayer('ViktorBarna', function (err, user) {
+            pong.registerPlayer('U99', 'ViktorBarna', function (err, user) {
               user.wins = 4;
               user.losses = 4;
               user.tau = 3;
@@ -1026,7 +1054,7 @@ describe('Pong', function () {
   describe("playerToS", function(){
     var currentUser = null;
     beforeEach(function(done){
-      pong.registerPlayer('ZhangJike', function (err, user) {
+      pong.registerPlayer('U96', 'ZhangJike', function (err, user) {
         currentUser = user;
         done();
       });
